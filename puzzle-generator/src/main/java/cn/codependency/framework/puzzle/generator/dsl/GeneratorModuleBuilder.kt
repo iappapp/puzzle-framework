@@ -1,0 +1,31 @@
+package cn.codependency.framework.puzzle.generator.dsl
+
+import cn.codependency.framework.puzzle.generator.registry.GeneratorRegistry
+import java.util.function.BiConsumer
+import java.util.function.Consumer
+
+@PuzzleGenerator
+class GeneratorModuleBuilder {
+    private val enumsBlocks = ArrayList<Consumer<GeneratorRegistry>>()
+    private val modulesBlocks = ArrayList<BiConsumer<GeneratorRegistry, GeneratorRegistryBuilder>>()
+
+    fun enums(block: EnumsBuilder.() -> Unit) {
+        enumsBlocks.add(Consumer { registry ->
+            EnumsBuilder(registry).apply(block)
+        })
+    }
+
+    fun models(block: ModelsBuilder.() -> Unit) {
+        modulesBlocks.add(BiConsumer { registry, registryBuilder ->
+            ModelsBuilder(registryBuilder, registry).apply(block)
+        })
+    }
+
+    fun build(registryBuilder: GeneratorRegistryBuilder, registry: GeneratorRegistry) {
+        // Process all enum definitions
+        enumsBlocks.forEach { it.accept(registry) }
+
+        // Process all model definitions
+        modulesBlocks.forEach { it.accept(registry, registryBuilder) }
+    }
+}
