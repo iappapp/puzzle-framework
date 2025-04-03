@@ -15,16 +15,15 @@ class GeneratorRegistryBuilder(
     private val multiTenant: Boolean = false,
     private val tenantId: String = ""
 ) {
-    private val registry: GeneratorRegistry = GeneratorRegistry(
-        basicPackage = basicPackage,
-        generatePackage = generatePackage,
-        sqlDir = sqlDir,
-        database = database,
-        tablePrefix = tablePrefix,
-        fieldPrefix = fieldPrefix,
-        multiTenant = multiTenant,
-        tenantId = tenantId
-    )
+    private val registry = GeneratorRegistry.builder()
+        .basePackage(basicPackage)
+        .generatePackage(generatePackage)
+        .database(database)
+        .multiTenant(multiTenant)
+        .tenantId(tenantId)
+        .sqlDir(sqlDir)
+        .tablePrefix(tablePrefix)
+        .fieldPrefix(fieldPrefix).build();
 
     private val relationLoaders = ArrayList<Runnable>()
 

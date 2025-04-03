@@ -1,11 +1,13 @@
 package cn.codependency.framework.puzzle.generator.dsl
 
+import cn.codependency.framework.puzzle.generator.config.Extend
 import cn.codependency.framework.puzzle.generator.config.FieldType
 import cn.codependency.framework.puzzle.generator.config.GeneratorFieldType
 import cn.codependency.framework.puzzle.generator.field.EnumGeneratorField
 import cn.codependency.framework.puzzle.generator.field.GeneratorField
 import cn.codependency.framework.puzzle.generator.field.SimpleGeneratorField
 import cn.codependency.framework.puzzle.generator.registry.GeneratorRegistry
+import java.math.BigDecimal
 
 @PuzzleGenerator
 open class DefaultFieldsBuilder(private val registry: GeneratorRegistry) {
@@ -20,11 +22,14 @@ open class DefaultFieldsBuilder(private val registry: GeneratorRegistry) {
     }
 
     open fun decimal(name: String, label: String, precision: Int? = null, mask: Boolean? = null) {
-
-        this.field(name, label, java.math.BigDecimal::class.java).apply {
-            precision?.let { precision = it }
-            mask?.let { mask = it }
+        val extend = Extend()
+        extend.apply {
+            precision?.let { this.precision = it }
+            mask?.let { this.mask = it }
         }
+        this.fields.add(
+            SimpleGeneratorField(name, GeneratorFieldType(BigDecimal::class.java.name) as FieldType, label, extend)
+        )
     }
 
     open fun enum(name: String, label: String, enum: String) {
@@ -40,10 +45,7 @@ open class DefaultFieldsBuilder(private val registry: GeneratorRegistry) {
         val fieldBuilder = FieldBuilder()
         fieldBuilder.apply(block)
         this.fields.add(
-            SimpleGeneratorField(
-                name,
-                GeneratorFieldType(typeClass.name) as FieldType, label, fieldBuilder.extend
-            )
+            SimpleGeneratorField(name, GeneratorFieldType(typeClass.name) as FieldType, label, fieldBuilder.extend)
         )
     }
 
@@ -60,13 +62,12 @@ open class DefaultFieldsBuilder(private val registry: GeneratorRegistry) {
     }
 
     open fun string(name: String, label: String, maxLength: Int? = null) {
-        val builder = FieldBuilder(registry, name, label, String::class.java).apply {
+        var extend = Extend().apply {
             maxLength?.let { this.maxLength = it }
         }
-        fields.add(builder.build())
-        this.field(name, label, String::class.java).apply {
-            maxLength?.let { this.maxLength = it }
-        }
+        this.fields.add(
+            SimpleGeneratorField(name, GeneratorFieldType(String::class.java.name), label, extend)
+        )
     }
 
     fun build(): List<GeneratorField> = fields.toList()

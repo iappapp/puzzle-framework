@@ -1,5 +1,6 @@
 package cn.codependency.framework.puzzle.generator.dsl
 
+import cn.codependency.framework.puzzle.generator.config.GeneratorFieldType
 import cn.codependency.framework.puzzle.generator.config.ModelDefinition
 import cn.codependency.framework.puzzle.generator.constants.ModelType
 import cn.codependency.framework.puzzle.generator.registry.GeneratorRegistry
@@ -69,20 +70,22 @@ class ModelBuilder private constructor(
     }
 
     fun refs(block: RefBuilder.() -> Unit) {
-        this.registryBuilder.getRelationLoaders().add()
+        this.registryBuilder.getRelationLoaders().add(Runnable {
+            var refBuilder = RefBuilder(registry, definition)
+            block.invoke(refBuilder)
+        })
     }
 
     fun build(): ModelDefinition {
-        definition = ModelDefinition(
-            name = name,
-            label = label,
-            idType = idType,
-            modelType = modelType,
-            tenantIsolation = tenantIsolation,
-            fieldPrefix = fieldPrefix,
-            tablePrefix = tablePrefix
-            // Include other fields from sub-builders as needed
-        )
+        definition = ModelDefinition(registry, name)
+            .setName(name)
+            .setLabel(label)
+            .setIdType(GeneratorFieldType(idType.name))
+            .setModelType(modelType)
+            .setTenantIsolation(tenantIsolation)
+            .setFieldPrefix(fieldPrefix)
+            .setTablePrefix(tablePrefix)
+
         return definition
     }
 }
