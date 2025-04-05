@@ -98,7 +98,7 @@ class ModelFieldsBuilder(
     ) {
         val modelBuilder = ModelBuilder(registryBuilder, registry, modelName, label, ModelType.DOMAIN, idType, this.definition.tenantIsolation)
         val subModel = modelBuilder.build()
-        this.definition.addSubModelField(name, label, subModel, relateField, RefType.ONE_TO_MANY)
+        this.definition.addSubModelField(name, label, subModel, relateField, RefType.ONE_TO_ONE)
         block.invoke(modelBuilder)
     }
 
