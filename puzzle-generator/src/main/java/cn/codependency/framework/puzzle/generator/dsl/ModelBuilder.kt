@@ -38,7 +38,9 @@ class ModelBuilder private constructor(
         idType,
         ModelType.ROOT, // Assuming DEFAULT is a constant in ModelType
         tenantIsolation
-    )
+    ) {
+        definition = build()
+    }
 
     // Secondary constructor with modelType
     constructor(
@@ -57,7 +59,10 @@ class ModelBuilder private constructor(
         idType,
         modelType,
         tenantIsolation
-    )
+    ) {
+        definition = build()
+    }
+
 
     fun fields(block: ModelFieldsBuilder.() -> Unit) {
         val fieldsBuilder = ModelFieldsBuilder(registryBuilder, registry, definition).apply(block)
