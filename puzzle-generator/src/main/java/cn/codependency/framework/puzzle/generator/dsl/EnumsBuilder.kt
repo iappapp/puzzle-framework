@@ -8,7 +8,8 @@ class EnumsBuilder(private val registry: GeneratorRegistry) :
     ArrayList<EnumDefinition<Any, Any>>() {
 
     fun enum(name: String, label: String, block: EnumBuilder<Any, Any>.() -> Unit) {
-        val builder = EnumBuilder<Any, Any>(registry, name, label).apply(block)
-        add(builder.build())
+        val builder = EnumBuilder<Any, Any>(registry, name, label)
+        block.invoke(builder)
+        this.add(builder.build())
     }
 }

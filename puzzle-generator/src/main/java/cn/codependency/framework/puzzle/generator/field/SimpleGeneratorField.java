@@ -7,6 +7,7 @@ import cn.codependency.framework.puzzle.generator.config.ListGeneratorFieldType;
 import cn.codependency.framework.puzzle.generator.constants.ColumnMapping;
 import cn.codependency.framework.puzzle.generator.constants.Database;
 import cn.codependency.framework.puzzle.generator.registry.GeneratorRegistry;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

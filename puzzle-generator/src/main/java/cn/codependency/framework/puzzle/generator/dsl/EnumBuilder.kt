@@ -13,14 +13,12 @@ class EnumBuilder<K : Any, V : Any>(
     private val items = ArrayList<EnumItem<K, V>>()
 
     fun item(name: String, key: K, value: V) {
-        items.add(EnumItem(name, key, value))
+        this.items.add(EnumItem(name, key, value))
     }
 
     fun build(): EnumDefinition<K, V> {
-        return EnumDefinition<K, V>(
-            registry,
-            name,
-        ).setLabel(label)
+        return EnumDefinition<K, V>(registry, name,)
+            .setLabel(label)
             .setItems(items)
     }
 }

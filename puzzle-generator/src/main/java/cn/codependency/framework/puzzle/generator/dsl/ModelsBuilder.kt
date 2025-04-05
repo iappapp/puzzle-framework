@@ -12,7 +12,7 @@ class ModelsBuilder(
     fun model(
         name: String,
         label: String,
-        idType: Class<*> = String::class.java,
+        idType: Class<*> = java.lang.Long::class.java,
         tenantIsolation: Boolean = false,
         block: ModelBuilder.() -> Unit
     ) {

@@ -11,7 +11,7 @@ fun module(block: GeneratorModuleBuilder.() -> Unit): GeneratorModuleBuilder {
 // Registry DSL 构建函数
 fun registry(
     basicPackage: String,
-    generatePackage: String = "generated",
+    generatePackage: String = "generate",
     sqlDir: String = "sql",
     database: Database = Database.Mysql,
     tablePrefix: String = "",

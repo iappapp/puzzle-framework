@@ -10,6 +10,8 @@ class DoubleLinkBuilder {
         anotherRefField: String,
         block: AnotherBuilder.() -> Unit = {}
     ) {
-        another = AnotherBuilder(anotherRefName, anotherRefLabel, anotherRefField).apply(block)
+        val anotherBuilder = AnotherBuilder(anotherRefName, anotherRefLabel, anotherRefField)
+        block.invoke(anotherBuilder)
+        this.another = anotherBuilder
     }
 }

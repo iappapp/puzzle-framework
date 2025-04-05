@@ -1,10 +1,10 @@
 package cn.codependency.framework.puzzle.generator.dsl
 
-import cn.codependency.framework.puzzle.generator.config.GeneratorFieldType
 import cn.codependency.framework.puzzle.generator.config.ModelDefinition
 import cn.codependency.framework.puzzle.generator.constants.ModelType
 import cn.codependency.framework.puzzle.generator.registry.GeneratorRegistry
 import java.lang.Class
+import java.util.*
 
 @PuzzleGenerator
 class ModelBuilder private constructor(
@@ -39,7 +39,11 @@ class ModelBuilder private constructor(
         ModelType.ROOT, // Assuming DEFAULT is a constant in ModelType
         tenantIsolation
     ) {
-        definition = build()
+        definition = ModelDefinition(registry, name)
+                .setLabel(label)
+                .setIdTypeClass(idType)
+                .setModelType(this.modelType)
+                .setTenantIsolation(tenantIsolation);
     }
 
     // Secondary constructor with modelType
@@ -60,36 +64,45 @@ class ModelBuilder private constructor(
         modelType,
         tenantIsolation
     ) {
-        definition = build()
+        definition = ModelDefinition(registry, name)
+            .setLabel(label)
+            .setIdTypeClass(idType)
+            .setModelType(this.modelType)
+            .setTenantIsolation(tenantIsolation)
     }
 
 
     fun fields(block: ModelFieldsBuilder.() -> Unit) {
-        val fieldsBuilder = ModelFieldsBuilder(registryBuilder, registry, definition).apply(block)
+        val fieldsBuilder = ModelFieldsBuilder(registryBuilder, registry, definition)
         // Store fields configuration in definition
+        block.invoke(fieldsBuilder)
     }
 
     fun queries(block: QueriesBuilder.() -> Unit) {
-        val queriesBuilder = QueriesBuilder(registryBuilder, registry, definition).apply(block)
+        val queriesBuilder = QueriesBuilder(registryBuilder, registry, definition)
         // Store queries configuration in definition
+        block.invoke(queriesBuilder)
     }
 
     fun refs(block: RefBuilder.() -> Unit) {
         this.registryBuilder.getRelationLoaders().add(Runnable {
-            var refBuilder = RefBuilder(registry, definition)
+            val refBuilder = RefBuilder(registry, definition)
             block.invoke(refBuilder)
         })
     }
 
     fun build(): ModelDefinition {
-        definition = ModelDefinition(registry, name)
-            .setName(name)
-            .setLabel(label)
-            .setIdType(GeneratorFieldType(idType.name))
-            .setModelType(modelType)
-            .setTenantIsolation(tenantIsolation)
-            .setFieldPrefix(fieldPrefix)
-            .setTablePrefix(tablePrefix)
+        if (Objects.nonNull(this.tablePrefix)) {
+            this.definition.setTablePrefix(this.tablePrefix)
+        } else if(Objects.nonNull(this.registry.tablePrefix)) {
+            this.definition.setTablePrefix(this.registry.tablePrefix)
+        }
+
+        if (Objects.nonNull(this.fieldPrefix)) {
+            this.definition.setFieldPrefix(this.fieldPrefix)
+        } else if (Objects.nonNull(this.registry.fieldPrefix)) {
+            this.definition.setFieldPrefix(this.registry.fieldPrefix)
+        }
 
         return definition
     }

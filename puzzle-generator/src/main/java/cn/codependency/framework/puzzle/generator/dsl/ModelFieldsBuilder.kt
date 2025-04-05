@@ -2,7 +2,13 @@ package cn.codependency.framework.puzzle.generator.dsl
 
 import cn.codependency.framework.puzzle.generator.config.Extend
 import cn.codependency.framework.puzzle.generator.config.ModelDefinition
+import cn.codependency.framework.puzzle.generator.constants.ModelType
 import cn.codependency.framework.puzzle.generator.constants.OrderDirection
+import cn.codependency.framework.puzzle.generator.constants.RefType
+import cn.codependency.framework.puzzle.generator.field.EnumGeneratorField
+import cn.codependency.framework.puzzle.generator.field.GeneratorField
+import cn.codependency.framework.puzzle.generator.field.JsonFieldGeneratorField
+import cn.codependency.framework.puzzle.generator.field.SeqFieldGeneratorField
 import cn.codependency.framework.puzzle.generator.registry.GeneratorRegistry
 
 @PuzzleGenerator
@@ -14,6 +20,7 @@ class ModelFieldsBuilder(
 
     override fun enum(name: String, label: String, enum: String) {
         // Implementation for enum field
+        this.definition.addEnumField(name, label, this.registry.getEnumDef(enum))
     }
 
     override fun field(
@@ -23,6 +30,10 @@ class ModelFieldsBuilder(
         block: FieldBuilder.() -> Unit
     ) {
         // Implementation for regular field
+        val fieldBuilder = FieldBuilder()
+        block.invoke(fieldBuilder)
+
+        this.definition.addSimpleField(name, typeClass, label, fieldBuilder.extend)
     }
 
     fun fileUrl(
@@ -31,6 +42,7 @@ class ModelFieldsBuilder(
         extend: Extend? = null
     ) {
         // Implementation for file URL field
+        this.definition.addFileUrlField(name, label, extend)
     }
 
     fun json(
@@ -40,6 +52,7 @@ class ModelFieldsBuilder(
         modelClassSimpleName: String? = null
     ) {
         // Implementation for JSON field without block
+        this.definition.addField((JsonFieldGeneratorField(name, label, modelClass, modelClassSimpleName) as GeneratorField))
     }
 
     fun json(
@@ -50,6 +63,9 @@ class ModelFieldsBuilder(
         block: FieldBuilder.() -> Unit
     ) {
         // Implementation for JSON field with block
+        val fieldBuilder = FieldBuilder()
+        block.invoke(fieldBuilder)
+        this.definition.addField(JsonFieldGeneratorField(name, label, modelClass, modelClassSimpleName) as GeneratorField)
     }
 
     fun mapping(
@@ -57,7 +73,10 @@ class ModelFieldsBuilder(
         label: String,
         block: MappingBuilder.() -> Unit
     ) {
-        // Implementation for mapping field
+        val mappingBuilder = MappingBuilder()
+        block.invoke(mappingBuilder)
+
+        this.definition.addMappingField(name, label, null, mappingBuilder.build())
     }
 
     fun seq(
@@ -66,6 +85,7 @@ class ModelFieldsBuilder(
         direction: OrderDirection = OrderDirection.ASC
     ) {
         // Implementation for sequence field
+        this.definition.addField((SeqFieldGeneratorField(name, label, direction)) as GeneratorField)
     }
 
     fun subModel(
@@ -73,10 +93,13 @@ class ModelFieldsBuilder(
         label: String,
         modelName: String,
         relateField: String,
-        idType: Class<*> = String::class.java,
+        idType: Class<*> = java.lang.Long::class.java,
         block: ModelBuilder.() -> Unit
     ) {
-        // Implementation for single sub-model
+        val modelBuilder = ModelBuilder(registryBuilder, registry, modelName, label, ModelType.DOMAIN, idType, this.definition.tenantIsolation)
+        val subModel = modelBuilder.build()
+        this.definition.addSubModelField(name, label, subModel, relateField, RefType.ONE_TO_MANY)
+        block.invoke(modelBuilder)
     }
 
     fun subModels(
@@ -84,9 +107,13 @@ class ModelFieldsBuilder(
         label: String,
         modelName: String,
         relateField: String,
-        idType: Class<*> = String::class.java,
+        idType: Class<*> = java.lang.Long::class.java,
         block: ModelBuilder.() -> Unit
     ) {
         // Implementation for multiple sub-models
+        val modelBuilder = ModelBuilder(registryBuilder, registry, modelName, label, ModelType.DOMAIN, idType, this.definition.tenantIsolation)
+        val subModel = modelBuilder.build()
+        this.definition.addSubModelField(name, label, subModel, relateField, RefType.ONE_TO_MANY)
+        block.invoke(modelBuilder)
     }
 }

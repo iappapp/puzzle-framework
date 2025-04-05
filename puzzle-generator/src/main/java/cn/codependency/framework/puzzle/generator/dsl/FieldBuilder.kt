@@ -9,6 +9,8 @@ class FieldBuilder {
     internal var extend: Extend? = null
 
     fun extend(block: ExtendBuilder.() -> Unit) {
-        extend = ExtendBuilder().apply(block).build()
+        val extendBuilder = ExtendBuilder()
+        block.invoke(extendBuilder)
+        this.extend = extendBuilder.build()
     }
 }

@@ -14,7 +14,7 @@ open class DefaultFieldsBuilder(private val registry: GeneratorRegistry) {
     private val fields = ArrayList<GeneratorField>()
 
     open fun boolean(name: String, label: String, block: FieldBuilder.() -> Unit = {}) {
-        this.field(name, label, Boolean::class.java, block)
+        this.field(name, label, java.lang.Boolean::class.java, block)
     }
 
     open fun date(name: String, label: String, block: FieldBuilder.() -> Unit = {}) {
@@ -43,30 +43,30 @@ open class DefaultFieldsBuilder(private val registry: GeneratorRegistry) {
         block: FieldBuilder.() -> Unit = {}
     ) {
         val fieldBuilder = FieldBuilder()
-        fieldBuilder.apply(block)
+        block.invoke(fieldBuilder)
         this.fields.add(
             SimpleGeneratorField(name, GeneratorFieldType(typeClass.name) as FieldType, label, fieldBuilder.extend)
         )
     }
 
     open fun int(name: String, label: String, block: FieldBuilder.() -> Unit = {}) {
-        this.field(name, label, Int::class.java, block)
+        this.field(name, label, java.lang.Integer::class.java, block)
     }
 
     open fun long(name: String, label: String, block: FieldBuilder.() -> Unit = {}) {
-        this.field(name, label, Long::class.java, block)
+        this.field(name, label, java.lang.Long::class.java, block)
     }
 
     open fun string(name: String, label: String, block: FieldBuilder.() -> Unit) {
-        this.field(name, label, String::class.java, block)
+        this.field(name, label, java.lang.String::class.java, block)
     }
 
     open fun string(name: String, label: String, maxLength: Int? = null) {
-        var extend = Extend().apply {
+        val extend = Extend().apply {
             maxLength?.let { this.maxLength = it }
         }
         this.fields.add(
-            SimpleGeneratorField(name, GeneratorFieldType(String::class.java.name), label, extend)
+            SimpleGeneratorField(name, GeneratorFieldType(java.lang.String::class.java.name), label, extend)
         )
     }
 

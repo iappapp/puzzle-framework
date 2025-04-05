@@ -28,15 +28,19 @@ class GeneratorRegistryBuilder(
     private val relationLoaders = ArrayList<Runnable>()
 
     fun defaultFields(block: DefaultFieldsBuilder.() -> Unit) {
-        DefaultFieldsBuilder(registry).apply(block)
+        val defaultFieldsBuilder = DefaultFieldsBuilder(registry)
+        block.invoke(defaultFieldsBuilder)
+        registry.defaultFields = defaultFieldsBuilder.build()
     }
 
     fun enums(block: EnumsBuilder.() -> Unit) {
-        EnumsBuilder(registry).apply(block)
+        val enumsBuilder = EnumsBuilder(registry)
+        block.invoke(enumsBuilder)
     }
 
     fun models(block: ModelsBuilder.() -> Unit) {
-        ModelsBuilder(this, registry).apply(block)
+        val modelsBuilder = ModelsBuilder(this, registry)
+        block.invoke(modelsBuilder)
     }
 
     fun module(module: GeneratorModuleBuilder) {
