@@ -23,12 +23,8 @@ class ModelFieldsBuilder(
         this.definition.addEnumField(name, label, this.registry.getEnumDef(enum))
     }
 
-    override fun field(
-        name: String,
-        label: String,
-        typeClass: Class<*>,
-        block: FieldBuilder.() -> Unit
-    ) {
+    override fun field(name: String, label: String, typeClass: Class<*>,
+        block: FieldBuilder.() -> Unit) {
         // Implementation for regular field
         val fieldBuilder = FieldBuilder()
         block.invoke(fieldBuilder)

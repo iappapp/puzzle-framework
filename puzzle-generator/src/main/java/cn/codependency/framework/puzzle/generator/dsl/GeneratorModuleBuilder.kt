@@ -25,9 +25,13 @@ class GeneratorModuleBuilder {
 
     fun build(registryBuilder: GeneratorRegistryBuilder, registry: GeneratorRegistry) {
         // Process all enum definitions
-        enumsBlocks.forEach { it.accept(registry) }
+        enumsBlocks.forEach {
+            it.accept(registry)
+        }
 
         // Process all model definitions
-        modulesBlocks.forEach { it.accept(registry, registryBuilder) }
+        modulesBlocks.forEach {
+            it.accept(registry, registryBuilder)
+        }
     }
 }

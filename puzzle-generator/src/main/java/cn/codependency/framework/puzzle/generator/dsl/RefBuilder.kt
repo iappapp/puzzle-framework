@@ -37,13 +37,13 @@ class RefBuilder(
     ) {
         val builder = DoubleLinkBuilder()
         block.invoke(builder)
+
         val another = builder.another
         if (Objects.isNull(another)) {
             throw RuntimeException("double link not define another side, use another(...)")
         } else {
-            this.definition.addDoubleSideRefField(refName, refLabel, another?.anotherRefName, another?.anotherRefLabel,
-                registry.getModelDef(model), another?.anotherRefField, refType
-            )
+            this.definition.addDoubleSideRefField(refName, refLabel, another?.anotherRefName,
+                another?.anotherRefLabel, registry.getModelDef(model), another?.anotherRefField, refType)
         }
     }
 
@@ -55,6 +55,7 @@ class RefBuilder(
     ) {
         val builder = IntermediateLinkBuilder()
         block.invoke(builder)
+
         this.definition.addIntermediateRefField(refName, refLabel, refType,
             this.registry.getModelDef(builder.leftModel), builder.leftRefField, builder.leftRefName, builder.leftRefLabel,
             this.registry.getModelDef(builder.rightModel), builder.rightRefField, builder.rightRefName, builder.rightRefLabel)

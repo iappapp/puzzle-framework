@@ -92,16 +92,16 @@ class ModelBuilder private constructor(
     }
 
     fun build(): ModelDefinition {
-        if (Objects.nonNull(this.tablePrefix)) {
-            this.definition.setTablePrefix(this.tablePrefix)
-        } else if(Objects.nonNull(this.registry.tablePrefix)) {
-            this.definition.setTablePrefix(this.registry.tablePrefix)
+        tablePrefix?.let {
+            definition.tablePrefix = it
+        } ?: registry.tablePrefix?.let {
+            definition.tablePrefix = it
         }
 
-        if (Objects.nonNull(this.fieldPrefix)) {
-            this.definition.setFieldPrefix(this.fieldPrefix)
-        } else if (Objects.nonNull(this.registry.fieldPrefix)) {
-            this.definition.setFieldPrefix(this.registry.fieldPrefix)
+        fieldPrefix?.let {
+            definition.fieldPrefix = it
+        } ?: registry.fieldPrefix?.let {
+            definition.fieldPrefix = it
         }
 
         return definition

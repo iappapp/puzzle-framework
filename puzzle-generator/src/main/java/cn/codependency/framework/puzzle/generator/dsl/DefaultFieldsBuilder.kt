@@ -22,24 +22,20 @@ open class DefaultFieldsBuilder(private val registry: GeneratorRegistry) {
     }
 
     open fun decimal(name: String, label: String, precision: Int? = null, mask: Boolean? = null) {
-        this.field(name, label, BigDecimal::class.java, {
+        this.field(name, label, BigDecimal::class.java) {
             extend {
                 precision?.let { this.precision = it }
-                mask?.let {this.mask = it}
+                mask?.let { this.mask = it }
             }
-        })
+        }
     }
 
     open fun enum(name: String, label: String, enum: String) {
         this.fields.add(EnumGeneratorField(name, label, this.registry.getEnumDef(enum)))
     }
 
-    open fun field(
-        name: String,
-        label: String,
-        typeClass: Class<*> = Any::class.java,
-        block: FieldBuilder.() -> Unit = {}
-    ) {
+    open fun field(name: String, label: String, typeClass: Class<*> = Any::class.java,
+                   block: FieldBuilder.() -> Unit = {}) {
         val fieldBuilder = FieldBuilder()
         block.invoke(fieldBuilder)
         this.fields.add(
@@ -63,11 +59,11 @@ open class DefaultFieldsBuilder(private val registry: GeneratorRegistry) {
         val extend = Extend().apply {
             maxLength?.let { this.maxLength = it }
         }
-        this.field(name, label, java.lang.String::class.java, {
+        this.field(name, label, java.lang.String::class.java) {
             extend {
                 maxLength?.let { this.maxLength = it }
             }
-        })
+        }
     }
 
     fun build(): List<GeneratorField> = fields.toList()
