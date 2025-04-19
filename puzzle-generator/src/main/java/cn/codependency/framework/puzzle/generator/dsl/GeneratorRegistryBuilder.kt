@@ -29,18 +29,18 @@ class GeneratorRegistryBuilder(
 
     fun defaultFields(block: DefaultFieldsBuilder.() -> Unit) {
         val defaultFieldsBuilder = DefaultFieldsBuilder(registry)
-        block.invoke(defaultFieldsBuilder)
+        block(defaultFieldsBuilder)
         registry.defaultFields = defaultFieldsBuilder.build()
     }
 
     fun enums(block: EnumsBuilder.() -> Unit) {
         val enumsBuilder = EnumsBuilder(registry)
-        block.invoke(enumsBuilder)
+        block(enumsBuilder)
     }
 
     fun models(block: ModelsBuilder.() -> Unit) {
         val modelsBuilder = ModelsBuilder(this, registry)
-        block.invoke(modelsBuilder)
+        block(modelsBuilder)
     }
 
     fun module(module: GeneratorModuleBuilder) {

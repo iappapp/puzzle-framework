@@ -75,19 +75,19 @@ class ModelBuilder private constructor(
     fun fields(block: ModelFieldsBuilder.() -> Unit) {
         val fieldsBuilder = ModelFieldsBuilder(registryBuilder, registry, definition)
         // Store fields configuration in definition
-        block.invoke(fieldsBuilder)
+        block(fieldsBuilder)
     }
 
     fun queries(block: QueriesBuilder.() -> Unit) {
         val queriesBuilder = QueriesBuilder(registryBuilder, registry, definition)
         // Store queries configuration in definition
-        block.invoke(queriesBuilder)
+        block(queriesBuilder)
     }
 
     fun refs(block: RefBuilder.() -> Unit) {
         this.registryBuilder.getRelationLoaders().add(Runnable {
             val refBuilder = RefBuilder(registry, definition)
-            block.invoke(refBuilder)
+            block(refBuilder)
         })
     }
 

@@ -17,7 +17,7 @@ class EnumBuilder<K : Any, V : Any>(
     }
 
     fun build(): EnumDefinition<K, V> {
-        return EnumDefinition<K, V>(registry, name,)
+        return EnumDefinition<K, V>(registry, name)
             .setLabel(label)
             .setItems(items)
     }

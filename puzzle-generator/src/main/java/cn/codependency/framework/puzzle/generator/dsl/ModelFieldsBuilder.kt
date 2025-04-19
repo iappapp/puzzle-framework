@@ -27,7 +27,7 @@ class ModelFieldsBuilder(
         block: FieldBuilder.() -> Unit) {
         // Implementation for regular field
         val fieldBuilder = FieldBuilder()
-        block.invoke(fieldBuilder)
+        block(fieldBuilder)
 
         this.definition.addSimpleField(name, typeClass, label, fieldBuilder.extend)
     }
@@ -60,7 +60,7 @@ class ModelFieldsBuilder(
     ) {
         // Implementation for JSON field with block
         val fieldBuilder = FieldBuilder()
-        block.invoke(fieldBuilder)
+        block(fieldBuilder)
         this.definition.addField(JsonFieldGeneratorField(name, label, modelClass, modelClassSimpleName) as GeneratorField)
     }
 
@@ -70,7 +70,7 @@ class ModelFieldsBuilder(
         block: MappingBuilder.() -> Unit
     ) {
         val mappingBuilder = MappingBuilder()
-        block.invoke(mappingBuilder)
+        block(mappingBuilder)
 
         this.definition.addMappingField(name, label, null, mappingBuilder.build())
     }
@@ -95,7 +95,7 @@ class ModelFieldsBuilder(
         val modelBuilder = ModelBuilder(registryBuilder, registry, modelName, label, ModelType.DOMAIN, idType, this.definition.tenantIsolation)
         val subModel = modelBuilder.build()
         this.definition.addSubModelField(name, label, subModel, relateField, RefType.ONE_TO_ONE)
-        block.invoke(modelBuilder)
+        block(modelBuilder)
     }
 
     fun subModels(
@@ -110,6 +110,6 @@ class ModelFieldsBuilder(
         val modelBuilder = ModelBuilder(registryBuilder, registry, modelName, label, ModelType.DOMAIN, idType, this.definition.tenantIsolation)
         val subModel = modelBuilder.build()
         this.definition.addSubModelField(name, label, subModel, relateField, RefType.ONE_TO_MANY)
-        block.invoke(modelBuilder)
+        block(modelBuilder)
     }
 }

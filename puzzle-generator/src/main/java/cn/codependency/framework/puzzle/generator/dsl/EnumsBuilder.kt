@@ -9,7 +9,7 @@ class EnumsBuilder(private val registry: GeneratorRegistry) :
 
     fun enum(name: String, label: String, block: EnumBuilder<Any, Any>.() -> Unit) {
         val builder = EnumBuilder<Any, Any>(registry, name, label)
-        block.invoke(builder)
+        block(builder)
         this.add(builder.build())
     }
 }

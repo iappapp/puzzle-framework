@@ -11,7 +11,7 @@ class DoubleLinkBuilder {
         block: AnotherBuilder.() -> Unit = {}
     ) {
         val anotherBuilder = AnotherBuilder(anotherRefName, anotherRefLabel, anotherRefField)
-        block.invoke(anotherBuilder)
+        block(anotherBuilder)
         this.another = anotherBuilder
     }
 }

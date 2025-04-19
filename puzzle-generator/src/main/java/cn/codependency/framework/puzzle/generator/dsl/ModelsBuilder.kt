@@ -16,7 +16,8 @@ class ModelsBuilder(
         tenantIsolation: Boolean = false,
         block: ModelBuilder.() -> Unit
     ) {
-        val modelBuilder = ModelBuilder(registryBuilder, registry, name, label, idType, tenantIsolation).apply(block)
+        val modelBuilder = ModelBuilder(registryBuilder, registry, name, label, idType, tenantIsolation)
+        block(modelBuilder)
         val modelDefinition = modelBuilder.build()
         add(modelDefinition)
     }

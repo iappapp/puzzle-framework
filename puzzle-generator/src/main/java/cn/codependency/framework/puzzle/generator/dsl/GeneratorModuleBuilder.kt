@@ -12,14 +12,14 @@ class GeneratorModuleBuilder {
     fun enums(block: EnumsBuilder.() -> Unit) {
         enumsBlocks.add(Consumer { registry ->
             val enumsBuilder = EnumsBuilder(registry)
-            block.invoke(enumsBuilder)
+            block(enumsBuilder)
         })
     }
 
     fun models(block: ModelsBuilder.() -> Unit) {
         modulesBlocks.add(BiConsumer { registry, registryBuilder ->
             val modelsBuilder = ModelsBuilder(registryBuilder, registry)
-            block.invoke(modelsBuilder)
+            block(modelsBuilder)
         })
     }
 

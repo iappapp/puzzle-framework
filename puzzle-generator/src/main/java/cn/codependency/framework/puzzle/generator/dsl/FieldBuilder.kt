@@ -10,7 +10,7 @@ class FieldBuilder {
 
     fun extend(block: ExtendBuilder.() -> Unit) {
         val extendBuilder = ExtendBuilder()
-        block.invoke(extendBuilder)
+        block(extendBuilder)
         this.extend = extendBuilder.build()
     }
 }

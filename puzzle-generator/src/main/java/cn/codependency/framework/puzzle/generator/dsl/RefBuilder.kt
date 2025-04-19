@@ -36,7 +36,7 @@ class RefBuilder(
         block: DoubleLinkBuilder.() -> Unit
     ) {
         val builder = DoubleLinkBuilder()
-        block.invoke(builder)
+        block(builder)
 
         val another = builder.another
         if (Objects.isNull(another)) {
@@ -54,7 +54,7 @@ class RefBuilder(
         block: IntermediateLinkBuilder.() -> Unit
     ) {
         val builder = IntermediateLinkBuilder()
-        block.invoke(builder)
+        block(builder)
 
         this.definition.addIntermediateRefField(refName, refLabel, refType,
             this.registry.getModelDef(builder.leftModel), builder.leftRefField, builder.leftRefName, builder.leftRefLabel,
