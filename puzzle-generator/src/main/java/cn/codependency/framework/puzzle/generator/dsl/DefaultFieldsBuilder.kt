@@ -56,9 +56,6 @@ open class DefaultFieldsBuilder(private val registry: GeneratorRegistry) {
     }
 
     open fun string(name: String, label: String, maxLength: Int? = null) {
-        val extend = Extend().apply {
-            maxLength?.let { this.maxLength = it }
-        }
         this.field(name, label, java.lang.String::class.java) {
             extend {
                 maxLength?.let { this.maxLength = it }
