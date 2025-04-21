@@ -9,11 +9,7 @@ class ModelsBuilder(
     private val registry: GeneratorRegistry
 ) : ArrayList<ModelDefinition>() {
 
-    fun model(
-        name: String,
-        label: String,
-        idType: Class<*> = java.lang.Long::class.java,
-        tenantIsolation: Boolean = false,
+    fun model(name: String, label: String, idType: Class<*> = java.lang.Long::class.java, tenantIsolation: Boolean = false,
         block: ModelBuilder.() -> Unit
     ) {
         val modelBuilder = ModelBuilder(registryBuilder, registry, name, label, idType, tenantIsolation)

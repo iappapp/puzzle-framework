@@ -10,49 +10,31 @@ class RefBuilder(
     private val registry: GeneratorRegistry,
     private val definition: ModelDefinition
 ) {
-    fun link(
-        refName: String,
-        refLabel: String,
-        model: String,
-        refField: String
-    ) {
+    fun link(refName: String, refLabel: String, model: String, refField: String) {
         this.definition.addRefField(refName, refLabel, this.registry.getModelDef(model), refField)
     }
 
-    fun links(
-        refName: String,
-        refLabel: String,
-        model: String,
-        refField: String
-    ) {
+    fun links(refName: String, refLabel: String, model: String, refField: String) {
         this.definition.addListRefField(refName, refLabel, this.registry.getModelDef(model), refField)
     }
 
-    fun doubleLink(
-        refName: String,
-        refLabel: String,
-        model: String,
-        refType: RefType,
-        block: DoubleLinkBuilder.() -> Unit
-    ) {
+    fun doubleLink(refName: String, refLabel: String, model: String, refType: RefType,
+        block: DoubleLinkBuilder.() -> Unit) {
         val builder = DoubleLinkBuilder()
         block(builder)
 
         val another = builder.another
-        if (Objects.isNull(another)) {
-            throw RuntimeException("double link not define another side, use another(...)")
-        } else {
-            this.definition.addDoubleSideRefField(refName, refLabel, another?.anotherRefName,
-                another?.anotherRefLabel, registry.getModelDef(model), another?.anotherRefField, refType)
+
+        require(Objects.nonNull(another)) {
+            "double link not define another side, use another(...)"
         }
+
+        this.definition.addDoubleSideRefField(refName, refLabel, another?.anotherRefName,
+            another?.anotherRefLabel, registry.getModelDef(model), another?.anotherRefField, refType)
     }
 
-    fun intermediate(
-        refName: String,
-        refLabel: String,
-        refType: RefType,
-        block: IntermediateLinkBuilder.() -> Unit
-    ) {
+    fun intermediate(refName: String, refLabel: String, refType: RefType,
+        block: IntermediateLinkBuilder.() -> Unit) {
         val builder = IntermediateLinkBuilder()
         block(builder)
 

@@ -13,12 +13,7 @@ class QueriesBuilder(
     private val registry: GeneratorRegistry,
     private val definition: ModelDefinition
 ) {
-    fun queryBy(
-        queryName: String,
-        queryField: String,
-        fieldClazz: Class<*>,
-        refType: RefType
-    ) {
+    fun queryBy(queryName: String, queryField: String, fieldClazz: Class<*>, refType: RefType) {
         this.definition.addQueryDefine(queryName, queryField, GeneratorFieldType(fieldClazz.name) as FieldType, refType)
     }
 }
