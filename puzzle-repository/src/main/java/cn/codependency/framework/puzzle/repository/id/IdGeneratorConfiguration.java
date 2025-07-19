@@ -13,7 +13,7 @@ public class IdGeneratorConfiguration {
     }
 
     @Bean
-    public IdGeneratorUtils idGeneratorUtils() {
-        return new IdGeneratorUtils(idGeneratorFactory());
+    public IdGeneratorUtils idGeneratorUtils(IdGeneratorFactory idGeneratorFactory) {
+        return new IdGeneratorUtils(idGeneratorFactory);
     }
 }
