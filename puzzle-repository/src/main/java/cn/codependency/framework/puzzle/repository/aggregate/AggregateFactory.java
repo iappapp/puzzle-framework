@@ -58,8 +58,7 @@ public class AggregateFactory {
      * @param <R>
      * @return
      */
-    public static <R extends Model> CollectionAggregateRoot<R>
-    buildCollectionAggregateRoot(Collection<R> aggregate) {
+    public static <R extends Model> CollectionAggregateRoot<R> buildCollectionAggregateRoot(Collection<R> aggregate) {
         return new CollectionAggregateRoot<R>(aggregate, copier);
     }
 
